@@ -1,7 +1,6 @@
 package org.example;
 
 import org.example.exception.InsufficientArgumentsException;
-import org.example.exception.NoSuchRouteException;
 import org.example.exception.NullAgumentException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -19,10 +18,10 @@ public class DistanceCalculatorTest {
         String end = "B";
 
         // when
-        Integer distance = DistanceCalculator.calculate(start, end);
+        String distance = DistanceCalculator.calculate(start, end);
 
         // then
-        assertEquals(5, distance);
+        assertEquals("5", distance);
     }
 
     @Test
@@ -31,8 +30,11 @@ public class DistanceCalculatorTest {
         String start = "B";
         String end = "A";
 
+        // when
+        String result = DistanceCalculator.calculate(start, end);
+
         // then
-        assertThrows(NoSuchRouteException.class, () -> DistanceCalculator.calculate(start, end));
+        assertEquals("NO SUCH ROUTE", result);
     }
 
     @ParameterizedTest
