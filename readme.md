@@ -6,13 +6,6 @@ then:
 返回正确的距离
 
 given:
-input中有字母不存在graph中
-when:
-计算
-when:
-throw exception
-
-given:
 input中输入的字母数量小于2
 when:
 计算
@@ -20,7 +13,7 @@ when:
 throw exception
 
 given:
-input中输入的有不合法的参数
+input为null
 when:
 计算
 when:
