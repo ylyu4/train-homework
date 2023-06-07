@@ -1,5 +1,8 @@
 package org.example;
 
+import org.example.exception.InvalidArgumentException;
+import org.example.exception.NullAgumentException;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -9,16 +12,21 @@ public class RoutesCalculator {
     public static final String GRAPH = "AB5,BC4,CD8,DC8,DE6,AD5,CE2,EB3,AE7";
 
     public static Integer calculateRouteAmountWithMaximumStop(String... args) {
+        validateArguments(args);
 
-        String start = args[0];
-        String end = args[1];
-        int maximumStop = Integer.parseInt(args[2]);
+        try {
+            String start = args[0];
+            String end = args[1];
+            int maximumStop = Integer.parseInt(args[2]);
 
-        String[] split = GRAPH.split(",");
-        List<String> strings = Arrays.asList(split);
+            String[] split = GRAPH.split(",");
+            List<String> strings = Arrays.asList(split);
 
-        int totalRoute = 0;
-        return findRouteWithMaximumStop(start, end, strings, 0, maximumStop, totalRoute);
+            int totalRoute = 0;
+            return findRouteWithMaximumStop(start, end, strings, 0, maximumStop, totalRoute);
+        } catch (NumberFormatException exception) {
+            throw new InvalidArgumentException();
+        }
 
     }
 
@@ -40,4 +48,12 @@ public class RoutesCalculator {
         return totalRoute;
     }
 
+    private static void validateArguments(Object[] args) {
+        if (args == null) {
+            throw new NullAgumentException();
+        }
+        if (args.length != 3) {
+            throw new InvalidArgumentException();
+        }
+    }
 }

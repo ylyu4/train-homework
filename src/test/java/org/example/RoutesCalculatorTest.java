@@ -1,8 +1,11 @@
 package org.example;
 
+import org.example.exception.InvalidArgumentException;
+import org.example.exception.NullAgumentException;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 public class RoutesCalculatorTest {
 
@@ -32,5 +35,24 @@ public class RoutesCalculatorTest {
         // then
         assertEquals(0, result);
     }
+
+    @Test
+    void should_throw_invalid_argument_exception_when_argument_is_null() {
+        // then
+        assertThrows(NullAgumentException.class, () -> RoutesCalculator.calculateRouteAmountWithMaximumStop(null));
+    }
+
+    @Test
+    void should_throw_invalid_argument_exception_when_argument_size_is_exceed() {
+        // then
+        assertThrows(InvalidArgumentException.class, () -> RoutesCalculator.calculateRouteAmountWithMaximumStop("A", "C", "3", "4"));
+    }
+
+    @Test
+    void should_throw_invalid_argument_exception_when_argument_type_is_wrong() {
+        // then
+        assertThrows(InvalidArgumentException.class, () -> RoutesCalculator.calculateRouteAmountWithMaximumStop("A", "C", "B"));
+    }
+
 
 }
