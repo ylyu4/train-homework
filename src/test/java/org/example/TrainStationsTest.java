@@ -2,7 +2,7 @@ package org.example;
 
 import org.example.exception.InsufficientArgumentsException;
 import org.example.exception.InvalidArgumentException;
-import org.example.exception.NullAgumentException;
+import org.example.exception.NullArgumentException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -54,7 +54,7 @@ public class TrainStationsTest {
 
         @Test
         void should_throw_null_argument_exception_when_input_is_null() {
-            assertThrows(NullAgumentException.class, () -> trainStations.calculateDistance(null));
+            assertThrows(NullArgumentException.class, () -> trainStations.calculateDistance(null));
         }
 
         @Test
@@ -118,7 +118,7 @@ public class TrainStationsTest {
         @Test
         void should_throw_invalid_argument_exception_when_argument_is_null() {
             // then
-            assertThrows(NullAgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumStop(null));
+            assertThrows(NullArgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumStop(null));
         }
 
         @Test
@@ -167,7 +167,7 @@ public class TrainStationsTest {
         @Test
         void should_throw_invalid_argument_exception_when_argument_is_null() {
             // then
-            assertThrows(NullAgumentException.class, () -> trainStations.calculateRouteNumbersWithFixedStop(null));
+            assertThrows(NullArgumentException.class, () -> trainStations.calculateRouteNumbersWithFixedStop(null));
         }
 
         @Test

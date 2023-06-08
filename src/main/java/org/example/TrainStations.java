@@ -1,16 +1,15 @@
 package org.example;
 
-import org.example.exception.InsufficientArgumentsException;
 import org.example.exception.InvalidArgumentException;
 import org.example.exception.NoSuchRouteException;
-import org.example.exception.NullAgumentException;
+import org.example.exception.NullArgumentException;
 import org.example.model.Route;
 import org.example.model.Trip;
+import org.example.validator.ArgsValidator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class TrainStations {
 
@@ -21,12 +20,12 @@ public class TrainStations {
     public TrainStations(String graph) {
         this.trips = Arrays.stream(graph.split(","))
                 .map(it -> new Trip(it.substring(0, 1), it.substring(1, 2), Integer.parseInt(it.substring(2))))
-                .collect(Collectors.toList());
+                .toList();
     }
 
 
     public Object calculateDistance(String...args) {
-        validateDistanceCalculationArguments(args);
+        ArgsValidator.validateDistanceCalculationArguments(args);
         try {
             return calculateDistanceForMultiplePoints(args);
         } catch (NoSuchRouteException ex) {
@@ -35,41 +34,36 @@ public class TrainStations {
     }
 
     public int calculateRouteNumbersWithMaximumStop(String... args) {
-        validateRouteCalculationArguments(args);
-
-        try {
-            String start = args[0];
-            String end = args[1];
-            int maximumStop = Integer.parseInt(args[2]);
-
-            List<Route> routes = new ArrayList<>();
-
-            findRouteWithMaximumStop(start, end, maximumStop, routes, new ArrayList<>());
-            return routes.size();
-        } catch (NumberFormatException exception) {
-            throw new InvalidArgumentException();
-        }
+        return calculateRouteNumbersWithStops(args).size();
     }
-
 
     public int calculateRouteNumbersWithFixedStop(String... args) {
-        validateRouteCalculationArguments(args);
+        int fixedStops = getFixedStops(args);
+        return (int) calculateRouteNumbersWithStops(args)
+                .stream()
+                .filter(route -> route.getTrips().size() == fixedStops)
+                .count();
+    }
+
+    public List<Route> calculateRouteNumbersWithStops(String... args) {
+        ArgsValidator.validateRouteCalculationArguments(args);
 
         try {
             String start = args[0];
             String end = args[1];
-            int fixedStop = Integer.parseInt(args[2]);
+            int stop = Integer.parseInt(args[2]);
 
             List<Route> routes = new ArrayList<>();
-            findRouteWithMaximumStop(start, end, fixedStop, routes, new ArrayList<>());
-            return (int) routes.stream().filter(route -> route.getTrips().size() == fixedStop).count();
+
+            findRouteWithStops(start, end, stop, routes, new ArrayList<>());
+            return routes;
         } catch (NumberFormatException exception) {
             throw new InvalidArgumentException();
         }
     }
 
-    private void findRouteWithMaximumStop(String start, String end, int maximumStop, List<Route> routes, List<Trip> tripList) {
-        if (tripList.size() >= maximumStop) {
+    private void findRouteWithStops(String start, String end, int stops, List<Route> routes, List<Trip> tripList) {
+        if (tripList.size() >= stops) {
             return;
         }
 
@@ -83,7 +77,7 @@ public class TrainStations {
             if (trip.getEnd().equals(end)) {
                 routes.add(new Route(tempTripList));
             }
-            findRouteWithMaximumStop(trip.getEnd(), end, maximumStop, routes, tempTripList);
+            findRouteWithStops(trip.getEnd(), end, stops, routes, tempTripList);
         }
     }
 
@@ -102,21 +96,13 @@ public class TrainStations {
         return new Route(allTrips).getTotalDistance();
     }
 
-
-    private static void validateDistanceCalculationArguments(String[] args) {
-        if (args == null) {
-            throw new NullAgumentException();
-        }
-        if (args.length < 2) {
-            throw new InsufficientArgumentsException();
-        }
-    }
-
-    private static void validateRouteCalculationArguments(Object[] args) {
-        if (args == null) {
-            throw new NullAgumentException();
-        }
-        if (args.length != 3) {
+    private static int getFixedStops(String... args) {
+        try {
+            return Integer.parseInt(args[2]);
+        } catch (Exception ex) {
+            if (ex instanceof NullPointerException) {
+                throw new NullArgumentException();
+            }
             throw new InvalidArgumentException();
         }
     }
