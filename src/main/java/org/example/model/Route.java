@@ -9,6 +9,10 @@ public class Route {
         this.trips = trips;
     }
 
+    public List<Trip> getTrips() {
+        return trips;
+    }
+
     public int getTotalDistance() {
        return trips.stream().mapToInt(Trip::getDistance).sum();
     }

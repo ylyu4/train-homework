@@ -89,7 +89,7 @@ public class TrainStationsTest {
     @Nested
     class RouteCalculatorWithMaximumStopsTest {
         @Test
-        void should_return_correct_route_number_first_scenario() {
+        void should_return_correct_route_numbers_when_given_maximum_stops_first_scenario() {
             // when
             Integer result = trainStations.calculateRouteNumbersWithMaximumStop("C", "C", "3");
 
@@ -98,7 +98,7 @@ public class TrainStationsTest {
         }
 
         @Test
-        void should_return_correct_route_numbers_second_scenario() {
+        void should_return_correct_route_numbers_when_given_maximum_stops_second_scenario() {
             // when
             Integer result = trainStations.calculateRouteNumbersWithMaximumStop("A", "C", "3");
 
@@ -131,6 +131,27 @@ public class TrainStationsTest {
         void should_throw_invalid_argument_exception_when_argument_type_is_wrong() {
             // then
             assertThrows(InvalidArgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumStop("A", "C", "B"));
+        }
+    }
+
+    @Nested
+    class RouteCalculatorWithFixedStopsTest{
+        @Test
+        void should_return_correct_route_numbers_when_given_fixed_stops_first_scenario() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithFixedStop("A", "C", "4");
+
+            // then
+            assertEquals(3, result);
+        }
+
+        @Test
+        void should_return_correct_route_numbers_when_given_fixed_stops_second_scenario() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithFixedStop("A", "C", "2");
+
+            // then
+            assertEquals(2, result);
         }
     }
 }

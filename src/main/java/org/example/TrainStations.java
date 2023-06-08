@@ -51,6 +51,17 @@ public class TrainStations {
         }
     }
 
+
+    public int calculateRouteNumbersWithFixedStop(String... args) {
+        String start = args[0];
+        String end = args[1];
+        int fixedStop = Integer.parseInt(args[2]);
+
+        List<Route> routes = new ArrayList<>();
+        findRouteWithMaximumStop(start, end, fixedStop, routes, new ArrayList<>());
+        return (int) routes.stream().filter(route -> route.getTrips().size() == fixedStop).count();
+    }
+
     private void findRouteWithMaximumStop(String start, String end, int maximumStop, List<Route> routes, List<Trip> tripList) {
         if (tripList.size() >= maximumStop) {
             return;
