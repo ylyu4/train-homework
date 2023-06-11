@@ -62,6 +62,47 @@ public class TrainStations {
         }
     }
 
+
+    public int calculateShortestRouteLength(String... args) {
+        String start = args[0];
+        String end = args[1];
+
+        List<Route> routes = new ArrayList<>();
+
+        calculateShortestRouteBetweenTwoStation(start, end, routes, new ArrayList<>());
+        return routes.stream()
+                .map(route -> route.getTotalDistance())
+                .min((distance1, distance2) -> distance1 < distance2 ? 0 : 1)
+                .orElse(0);
+    }
+
+    private void calculateShortestRouteBetweenTwoStation(String start, String end, List<Route> routes,
+                                                         List<Trip> tripList) {
+        List<Trip> tripsWithMatchedStart =
+                trips.stream()
+                .filter(it -> it.getStart().equals(start))
+                .toList();
+
+        if (tripsWithMatchedStart.isEmpty()) {
+            return;
+        }
+
+        for (Trip trip : tripsWithMatchedStart) {
+            if (isDuplicatedTrip(trip, tripList)) {
+                return;
+            }
+            List<Trip> tempTripList = new ArrayList<>();
+            if (!tripList.isEmpty()) {
+                tempTripList.addAll(tripList);
+            }
+            tempTripList.add(trip);
+            if (trip.getEnd().equals(end)) {
+                routes.add(new Route(tempTripList));
+            }
+            calculateShortestRouteBetweenTwoStation(trip.getEnd(), end, routes, tempTripList);
+        }
+    }
+
     private void findRouteWithStops(String start, String end, int stops, List<Route> routes, List<Trip> tripList) {
         if (tripList.size() >= stops) {
             return;
@@ -105,5 +146,11 @@ public class TrainStations {
             }
             throw new InvalidArgumentException();
         }
+    }
+
+    private boolean isDuplicatedTrip(Trip trip, List<Trip> tripList) {
+        return tripList.stream()
+                .anyMatch(it -> it.getStart().equalsIgnoreCase(trip.getStart()) &&
+                        it.getEnd().equalsIgnoreCase(trip.getEnd()));
     }
 }

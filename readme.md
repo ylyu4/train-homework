@@ -87,3 +87,27 @@ when:
 计算路线数量
 then:
 throw exception
+
+
+###
+
+given:
+input中输入的字母数量等于2 && 两个字母间存在1到多条路线
+when:
+计算最短route的距离
+then:
+返回最小的路径的距离
+
+given:
+input中输入的字母数量等于2 && 两个字母间不存在路线
+when:
+计算最短route的距离
+then:
+返回路线不存在
+
+given:
+input中输入为null || input中输入的字母数量不等于2
+when:
+计算最短route的距离
+then:
+throw exception
