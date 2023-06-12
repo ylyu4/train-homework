@@ -15,6 +15,15 @@ public class ArgsValidator {
         }
     }
 
+    public static void validateShortestDistanceCalculationArguments(String[] args) {
+        if (args == null) {
+            throw new NullArgumentException();
+        }
+        if (args.length != 2) {
+            throw new InvalidArgumentException();
+        }
+    }
+
     public static void validateRouteCalculationArguments(String[] args) {
         if (args == null) {
             throw new NullArgumentException();

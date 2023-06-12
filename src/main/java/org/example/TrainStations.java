@@ -64,6 +64,8 @@ public class TrainStations {
 
 
     public int calculateShortestRouteLength(String... args) {
+        ArgsValidator.validateShortestDistanceCalculationArguments(args);
+
         String start = args[0];
         String end = args[1];
 
@@ -73,7 +75,7 @@ public class TrainStations {
         return routes.stream()
                 .map(route -> route.getTotalDistance())
                 .min((distance1, distance2) -> distance1 < distance2 ? 0 : 1)
-                .orElse(0);
+                .orElseThrow(NoSuchRouteException::new);
     }
 
     private void calculateShortestRouteBetweenTwoStation(String start, String end, List<Route> routes,

@@ -2,6 +2,7 @@ package org.example;
 
 import org.example.exception.InsufficientArgumentsException;
 import org.example.exception.InvalidArgumentException;
+import org.example.exception.NoSuchRouteException;
 import org.example.exception.NullArgumentException;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -202,5 +203,23 @@ public class TrainStationsTest {
             // then
             assertEquals(9, result);
         }
+
+        @Test
+        void should_throw_exception_when_there_is_no_route_between_stations() {
+            assertThrows(NoSuchRouteException.class, () -> trainStations.calculateShortestRouteLength("A", "A"));
+        }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_is_null() {
+            // then
+            assertThrows(NullArgumentException.class, () -> trainStations.calculateShortestRouteLength(null));
+        }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_size_is_exceed() {
+            // then
+            assertThrows(InvalidArgumentException.class, () -> trainStations.calculateShortestRouteLength("A", "C", "3", "4"));
+        }
+
     }
 }
