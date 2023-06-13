@@ -222,4 +222,16 @@ public class TrainStationsTest {
         }
 
     }
+
+    @Nested
+    class RouteNumberCalculatorWithMaximumDistanceTest {
+        @Test
+        void should_return_the_correct_route_numbers_with_maximum_distance() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithMaximumDistance("C", "C", "30");
+
+            // then
+            assertEquals(7, result);
+        }
+    }
 }

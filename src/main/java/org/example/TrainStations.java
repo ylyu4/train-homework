@@ -45,7 +45,51 @@ public class TrainStations {
                 .count();
     }
 
-    public List<Route> calculateRouteNumbersWithStops(String... args) {
+    public int calculateShortestRouteLength(String... args) {
+        ArgsValidator.validateShortestDistanceCalculationArguments(args);
+
+        String start = args[0];
+        String end = args[1];
+
+        List<Route> routes = new ArrayList<>();
+
+        calculateShortestRouteBetweenTwoStation(start, end, routes, new ArrayList<>());
+        return routes.stream()
+                .map(route -> route.getTotalDistance())
+                .min((distance1, distance2) -> distance1 < distance2 ? 0 : 1)
+                .orElseThrow(NoSuchRouteException::new);
+    }
+
+    public int calculateRouteNumbersWithMaximumDistance(String... args) {
+        String start = args[0];
+        String end = args[1];
+        int maxDistance = Integer.parseInt(args[2]);
+
+        List<Route> routes = new ArrayList<>();
+        calculateRouteNumbersWithLimitDistance(start, end, routes, new ArrayList<>(), maxDistance);
+        return routes.size();
+    }
+
+    private void calculateRouteNumbersWithLimitDistance(String start, String end, List<Route> routes,
+                                                        List<Trip> tripList, int maxDistance) {
+        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
+        for (Trip trip : tripsWithMatchedStart) {
+            List<Trip> tempTripList = new ArrayList<>();
+            if (!tripList.isEmpty()) {
+                tempTripList.addAll(tripList);
+            }
+            if (tempTripList.stream().mapToInt(Trip::getDistance).sum() + trip.getDistance() >= maxDistance) {
+                break;
+            }
+            tempTripList.add(trip);
+            if (trip.getEnd().equals(end)) {
+                routes.add(new Route(tempTripList));
+            }
+            calculateRouteNumbersWithLimitDistance(trip.getEnd(), end, routes, tempTripList, maxDistance);
+        }
+    }
+
+    private List<Route> calculateRouteNumbersWithStops(String... args) {
         ArgsValidator.validateRouteCalculationArguments(args);
 
         try {
@@ -60,22 +104,6 @@ public class TrainStations {
         } catch (NumberFormatException exception) {
             throw new InvalidArgumentException();
         }
-    }
-
-
-    public int calculateShortestRouteLength(String... args) {
-        ArgsValidator.validateShortestDistanceCalculationArguments(args);
-
-        String start = args[0];
-        String end = args[1];
-
-        List<Route> routes = new ArrayList<>();
-
-        calculateShortestRouteBetweenTwoStation(start, end, routes, new ArrayList<>());
-        return routes.stream()
-                .map(route -> route.getTotalDistance())
-                .min((distance1, distance2) -> distance1 < distance2 ? 0 : 1)
-                .orElseThrow(NoSuchRouteException::new);
     }
 
     private void calculateShortestRouteBetweenTwoStation(String start, String end, List<Route> routes,

@@ -103,11 +103,41 @@ input中输入的字母数量等于2 && 两个字母间不存在路线
 when:
 计算最短route的距离
 then:
-返回路线不存在
+throw exception
 
 given:
 input中输入为null || input中输入的字母数量不等于2
 when:
 计算最短route的距离
+then:
+throw exception
+
+
+### 
+given:
+input中输入的字母数量等于2 && 两个字母间存在1到多条路线 && 一个正整数作为距离限制
+when:
+计算符合规则的route数量
+then:
+返回正确的route数量
+
+given:
+input中输入为null || input中输入的数量不等于3
+when:
+计算符合规则的route数量
+then:
+throw exception
+
+given:
+两个字母间不存在路线
+when:
+计算符合规则的route数量
+then:
+返回0
+
+given:
+一个非正整数的参数作为距离限制
+when:
+计算符合规则的route数量
 then:
 throw exception
