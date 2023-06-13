@@ -40,7 +40,7 @@ public class TrainStations {
     }
 
     public int calculateRouteNumbersWithFixedStop(String... args) {
-        int fixedStops = getFixedStops(args);
+        int fixedStops = getFixeIntegerValue(args);
         return (int) calculateRouteNumbersWithStops(args)
                 .stream()
                 .filter(route -> route.getTrips().size() == fixedStops)
@@ -57,7 +57,7 @@ public class TrainStations {
 
         calculateShortestRouteBetweenTwoStation(start, end, routes, new ArrayList<>());
         return routes.stream()
-                .map(route -> route.getTotalDistance())
+                .map(Route::getTotalDistance)
                 .min((distance1, distance2) -> distance1 < distance2 ? 0 : 1)
                 .orElseThrow(NoSuchRouteException::new);
     }
@@ -90,21 +90,15 @@ public class TrainStations {
     }
 
     public int calculateRouteNumbersWithMaximumDuration(String... args) {
-        ArgsValidator.validateRouteCalculationArguments(args);
-        try {
-            String start = args[0];
-            String end = args[1];
-            int durations = Integer.parseInt(args[2]);
-
-            List<Route> routes = new ArrayList<>();
-            findRouteWithMaximumDurations(start, end, routes, new ArrayList<>(), durations);
-            return routes.size();
-        } catch (NumberFormatException ex) {
-            throw new InvalidArgumentException();
-        }
+        return getRoutesByDurations(args).size();
     }
 
     public int calculateRouteNumbersWithFixedDurations(String... args) {
+        int fixedDuration = getFixeIntegerValue(args);
+        return (int) getRoutesByDurations(args).stream().filter(it -> it.getTotalDuration() == fixedDuration).count();
+    }
+
+    private List<Route> getRoutesByDurations(String... args) {
         ArgsValidator.validateRouteCalculationArguments(args);
         try {
             String start = args[0];
@@ -113,7 +107,7 @@ public class TrainStations {
 
             List<Route> routes = new ArrayList<>();
             findRouteWithMaximumDurations(start, end, routes, new ArrayList<>(), durations);
-            return (int) routes.stream().filter(it -> it.getTotalDuration() == durations).count();
+            return routes;
         } catch (NumberFormatException ex) {
             throw new InvalidArgumentException();
         }
@@ -226,7 +220,7 @@ public class TrainStations {
         return allTrips;
     }
 
-    private static int getFixedStops(String... args) {
+    private static int getFixeIntegerValue(String... args) {
         try {
             return Integer.parseInt(args[2]);
         } catch (Exception ex) {
