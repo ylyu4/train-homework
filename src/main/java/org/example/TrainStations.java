@@ -61,13 +61,19 @@ public class TrainStations {
     }
 
     public int calculateRouteNumbersWithMaximumDistance(String... args) {
-        String start = args[0];
-        String end = args[1];
-        int maxDistance = Integer.parseInt(args[2]);
+        ArgsValidator.validateRouteCalculationArguments(args);
 
-        List<Route> routes = new ArrayList<>();
-        calculateRouteNumbersWithLimitDistance(start, end, routes, new ArrayList<>(), maxDistance);
-        return routes.size();
+        try {
+            String start = args[0];
+            String end = args[1];
+            int maxDistance = Integer.parseInt(args[2]);
+
+            List<Route> routes = new ArrayList<>();
+            calculateRouteNumbersWithLimitDistance(start, end, routes, new ArrayList<>(), maxDistance);
+            return routes.size();
+        } catch (NumberFormatException exception) {
+            throw new InvalidArgumentException();
+        }
     }
 
     private void calculateRouteNumbersWithLimitDistance(String start, String end, List<Route> routes,

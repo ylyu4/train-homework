@@ -233,5 +233,42 @@ public class TrainStationsTest {
             // then
             assertEquals(7, result);
         }
+
+        @Test
+        void should_return_the_correct_route_numbers_with_maximum_distance_scenario_2() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithMaximumDistance("C", "C", "2");
+
+            // then
+            assertEquals(0, result);
+        }
+
+        @Test
+        void should_return_0_route_numbers_with_maximum_distance_when_there_is_no_route_between_two_station() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithMaximumDistance("A", "A", "30");
+
+            // then
+            assertEquals(0, result);
+        }
+
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_is_null() {
+            // then
+            assertThrows(NullArgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumDistance(null));
+        }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_size_is_exceed() {
+            // then
+            assertThrows(InvalidArgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumDistance("A", "C", "3", "4"));
+        }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_maximum_distance_is_not_integer() {
+            // then
+            assertThrows(InvalidArgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumDistance("A", "C", "C"));
+        }
     }
 }
