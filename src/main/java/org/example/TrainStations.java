@@ -112,7 +112,7 @@ public class TrainStations {
     }
 
     private void calculateRouteNumbersWithLimitDuration(String start, String end, List<Route> routes, List<Trip> tripList, int maxDuration) {
-        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
+        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equalsIgnoreCase(start)).toList();
         for (Trip trip : tripsWithMatchedStart) {
             boolean isTripDurationValidForCurrentRoute = Route.getTotalDuration(tripList) +
                     trip.getDurations() >= maxDuration;
@@ -152,7 +152,7 @@ public class TrainStations {
     }
 
     private void findRouteWithMaximumDurations(String start, String end, List<Route> routes, List<Trip> tripList, int durations) {
-        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
+        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equalsIgnoreCase(start)).toList();
         for (Trip trip : tripsWithMatchedStart) {
             boolean isTripDurationValidForCurrentRoute = tripList.stream().mapToInt(Trip::getDurations).sum() +
                     trip.getDurations() + tripList.size() * STOP_DURATION > durations;
@@ -171,7 +171,7 @@ public class TrainStations {
 
     private void calculateRouteNumbersWithLimitDistance(String start, String end, List<Route> routes,
                                                         List<Trip> tripList, int maxDistance) {
-        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
+        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equalsIgnoreCase(start)).toList();
         for (Trip trip : tripsWithMatchedStart) {
             boolean isTripDistanceValidForCurrentRoute = tripList.stream().mapToInt(Trip::getDistance).sum() +
                     trip.getDistance() >= maxDistance;
@@ -200,7 +200,7 @@ public class TrainStations {
 
     private void calculateShortestRouteBetweenTwoStation(String start, String end, List<Route> routes,
                                                          List<Trip> tripList) {
-        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
+        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equalsIgnoreCase(start)).toList();
 
         if (tripsWithMatchedStart.isEmpty()) {
             return;
@@ -220,7 +220,7 @@ public class TrainStations {
             return;
         }
 
-        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
+        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equalsIgnoreCase(start)).toList();
         for (Trip trip : tripsWithMatchedStart) {
             List<Trip> tempTripList = manageTripsAndRoute(end, routes, tripList, trip);
             findRouteWithStops(trip.getEnd(), end, stops, routes, tempTripList);
@@ -233,7 +233,7 @@ public class TrainStations {
             tempTripList.addAll(tripList);
         }
         tempTripList.add(trip);
-        if (trip.getEnd().equals(end)) {
+        if (trip.getEnd().equalsIgnoreCase(end)) {
             routes.add(new Route(tempTripList));
         }
         return tempTripList;
@@ -250,7 +250,7 @@ public class TrainStations {
             String start = args[i];
             String end = args[i + 1];
             Trip target = trips.stream()
-                    .filter(trip -> trip.getStart().equals(start) && trip.getEnd().equals(end))
+                    .filter(trip -> trip.getStart().equalsIgnoreCase(start) && trip.getEnd().equalsIgnoreCase(end))
                     .findFirst()
                     .orElseThrow(NoSuchRouteException::new);
             allTrips.add(target);
