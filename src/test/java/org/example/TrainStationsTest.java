@@ -361,5 +361,24 @@ public class TrainStationsTest {
             // then
             assertEquals(2, result);
         }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_is_null() {
+            // then
+            assertThrows(NullArgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumDuration(null));
+        }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_size_is_exceed() {
+            // then
+            assertThrows(InvalidArgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumDuration("A", "C", "3", "4"));
+        }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_type_is_wrong() {
+            // then
+            assertThrows(InvalidArgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumDuration("A", "C", "B"));
+        }
+
     }
 }

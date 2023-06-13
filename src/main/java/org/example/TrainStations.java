@@ -90,13 +90,18 @@ public class TrainStations {
     }
 
     public int calculateRouteNumbersWithMaximumDuration(String... args) {
-        String start = args[0];
-        String end = args[1];
-        int durations = Integer.parseInt(args[2]);
+        ArgsValidator.validateRouteCalculationArguments(args);
+        try {
+            String start = args[0];
+            String end = args[1];
+            int durations = Integer.parseInt(args[2]);
 
-        List<Route> routes = new ArrayList<>();
-        findRouteWithMaximumDurations(start, end, routes, new ArrayList<>(), durations);
-        return routes.size();
+            List<Route> routes = new ArrayList<>();
+            findRouteWithMaximumDurations(start, end, routes, new ArrayList<>(), durations);
+            return routes.size();
+        } catch (NumberFormatException ex) {
+            throw new InvalidArgumentException();
+        }
     }
 
     private void findRouteWithMaximumDurations(String start, String end, List<Route> routes, List<Trip> tripList, int durations) {
