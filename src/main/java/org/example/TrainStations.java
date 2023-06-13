@@ -162,7 +162,7 @@ public class TrainStations {
         }
     }
 
-    private static List<Trip> getTrips(String end, List<Route> routes, List<Trip> tripList, Trip trip, boolean isTripValidForCurrentRoute) {
+    private List<Trip> getTrips(String end, List<Route> routes, List<Trip> tripList, Trip trip, boolean isTripValidForCurrentRoute) {
         if (isTripValidForCurrentRoute) {
             return null;
         }
@@ -227,7 +227,7 @@ public class TrainStations {
         }
     }
 
-    private static List<Trip> manageTripsAndRoute(String end, List<Route> routes, List<Trip> tripList, Trip trip) {
+    private List<Trip> manageTripsAndRoute(String end, List<Route> routes, List<Trip> tripList, Trip trip) {
         List<Trip> tempTripList = new ArrayList<>();
         if (!tripList.isEmpty()) {
             tempTripList.addAll(tripList);
@@ -258,7 +258,7 @@ public class TrainStations {
         return allTrips;
     }
 
-    private static int getFixeIntegerValue(String... args) {
+    private int getFixeIntegerValue(String... args) {
         try {
             return Integer.parseInt(args[2]);
         } catch (Exception ex) {
