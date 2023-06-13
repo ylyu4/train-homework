@@ -80,10 +80,7 @@ public class TrainStations {
 
     private void calculateShortestRouteBetweenTwoStation(String start, String end, List<Route> routes,
                                                          List<Trip> tripList) {
-        List<Trip> tripsWithMatchedStart =
-                trips.stream()
-                .filter(it -> it.getStart().equals(start))
-                .toList();
+        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
 
         if (tripsWithMatchedStart.isEmpty()) {
             return;
@@ -93,14 +90,7 @@ public class TrainStations {
             if (isDuplicatedTrip(trip, tripList)) {
                 return;
             }
-            List<Trip> tempTripList = new ArrayList<>();
-            if (!tripList.isEmpty()) {
-                tempTripList.addAll(tripList);
-            }
-            tempTripList.add(trip);
-            if (trip.getEnd().equals(end)) {
-                routes.add(new Route(tempTripList));
-            }
+            List<Trip> tempTripList = manageTripsAndRoute(end, routes, tripList, trip);
             calculateShortestRouteBetweenTwoStation(trip.getEnd(), end, routes, tempTripList);
         }
     }
@@ -112,16 +102,21 @@ public class TrainStations {
 
         List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
         for (Trip trip : tripsWithMatchedStart) {
-            List<Trip> tempTripList = new ArrayList<>();
-            if (!tripList.isEmpty()) {
-                tempTripList.addAll(tripList);
-            }
-            tempTripList.add(trip);
-            if (trip.getEnd().equals(end)) {
-                routes.add(new Route(tempTripList));
-            }
+            List<Trip> tempTripList = manageTripsAndRoute(end, routes, tripList, trip);
             findRouteWithStops(trip.getEnd(), end, stops, routes, tempTripList);
         }
+    }
+
+    private static List<Trip> manageTripsAndRoute(String end, List<Route> routes, List<Trip> tripList, Trip trip) {
+        List<Trip> tempTripList = new ArrayList<>();
+        if (!tripList.isEmpty()) {
+            tempTripList.addAll(tripList);
+        }
+        tempTripList.add(trip);
+        if (trip.getEnd().equals(end)) {
+            routes.add(new Route(tempTripList));
+        }
+        return tempTripList;
     }
 
     private int calculateDistanceForMultiplePoints(String[] args) {
