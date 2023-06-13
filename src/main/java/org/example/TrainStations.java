@@ -9,7 +9,9 @@ import org.example.validator.ArgsValidator;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.function.Function;
 
 import static org.example.model.Route.STOP_DURATION;
 
@@ -48,18 +50,8 @@ public class TrainStations {
     }
 
     public int calculateShortestRouteLength(String... args) {
-        ArgsValidator.validateShortestDistanceCalculationArguments(args);
-
-        String start = args[0];
-        String end = args[1];
-
-        List<Route> routes = new ArrayList<>();
-
-        calculateShortestRouteBetweenTwoStation(start, end, routes, new ArrayList<>());
-        return routes.stream()
-                .map(Route::getTotalDistance)
-                .min((distance1, distance2) -> distance1 < distance2 ? 0 : 1)
-                .orElseThrow(NoSuchRouteException::new);
+        return getTheDurationForTheShortestRoute(args, Route::getTotalDistance,
+                (distance1, distance2) -> distance1 < distance2 ? 0 : 1);
     }
 
     public int calculateRouteNumbersWithMaximumDistance(String... args) {
@@ -99,6 +91,11 @@ public class TrainStations {
     }
 
     public int calculateTheShortestDurationRoute(String... args) {
+        return getTheDurationForTheShortestRoute(args, Route::getTotalDuration,
+                (duration1, duration2) -> duration1 < duration2 ? 0 : 1);
+    }
+
+    private Integer getTheDurationForTheShortestRoute(String[] args, Function<Route, Integer> function, Comparator<Integer> comparator) {
         ArgsValidator.validateShortestDistanceCalculationArguments(args);
         String start = args[0];
         String end = args[1];
@@ -107,8 +104,8 @@ public class TrainStations {
 
         calculateShortestRouteBetweenTwoStation(start, end, routes, new ArrayList<>());
         return routes.stream()
-                .map(Route::getTotalDuration)
-                .min((duration1, duration2) -> duration1 < duration2 ? 0 : 1)
+                .map(function)
+                .min(comparator)
                 .orElseThrow(NoSuchRouteException::new);
     }
 
