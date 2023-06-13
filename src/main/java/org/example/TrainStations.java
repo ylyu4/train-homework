@@ -107,36 +107,29 @@ public class TrainStations {
     private void findRouteWithMaximumDurations(String start, String end, List<Route> routes, List<Trip> tripList, int durations) {
         List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
         for (Trip trip : tripsWithMatchedStart) {
-            List<Trip> tempTripList = new ArrayList<>();
-            if (!tripList.isEmpty()) {
-                tempTripList.addAll(tripList);
-            }
-            if (tripList.stream().mapToInt(Trip::getDurations).sum() + trip.getDurations() + tripList.size() * STOP_DURATION > durations) {
-                break;
-            }
-            tempTripList.add(trip);
-            if (trip.getEnd().equals(end)) {
-                routes.add(new Route(tempTripList));
-            }
+            boolean isTripDurationValidForCurrentRoute = tripList.stream().mapToInt(Trip::getDurations).sum() +
+                    trip.getDurations() + tripList.size() * STOP_DURATION > durations;
+            List<Trip> tempTripList = getTrips(end, routes, tripList, trip, isTripDurationValidForCurrentRoute);
+            if (tempTripList == null) break;
             findRouteWithMaximumDurations(trip.getEnd(), end, routes, tempTripList, durations);
         }
+    }
+
+    private static List<Trip> getTrips(String end, List<Route> routes, List<Trip> tripList, Trip trip, boolean isTripValidForCurrentRoute) {
+        if (isTripValidForCurrentRoute) {
+            return null;
+        }
+        return manageTripsAndRoute(end, routes, tripList, trip);
     }
 
     private void calculateRouteNumbersWithLimitDistance(String start, String end, List<Route> routes,
                                                         List<Trip> tripList, int maxDistance) {
         List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
         for (Trip trip : tripsWithMatchedStart) {
-            List<Trip> tempTripList = new ArrayList<>();
-            if (!tripList.isEmpty()) {
-                tempTripList.addAll(tripList);
-            }
-            if (tempTripList.stream().mapToInt(Trip::getDistance).sum() + trip.getDistance() >= maxDistance) {
-                break;
-            }
-            tempTripList.add(trip);
-            if (trip.getEnd().equals(end)) {
-                routes.add(new Route(tempTripList));
-            }
+            boolean isTripDistanceValidForCurrentRoute = tripList.stream().mapToInt(Trip::getDistance).sum() +
+                    trip.getDistance() >= maxDistance;
+            List<Trip> tempTripList = getTrips(end, routes, tripList, trip, isTripDistanceValidForCurrentRoute);
+            if (tempTripList == null) break;
             calculateRouteNumbersWithLimitDistance(trip.getEnd(), end, routes, tempTripList, maxDistance);
         }
     }
