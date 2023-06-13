@@ -410,5 +410,32 @@ public class TrainStationsTest {
             // then
             assertEquals(1, result);
         }
+
+        @Test
+        void should_return_zero_route_numbers_when_there_is_no_routes_in_given_stops() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithFixedDurations("C", "A", "11");
+
+            // then
+            assertEquals(0, result);
+        }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_is_null() {
+            // then
+            assertThrows(NullArgumentException.class, () -> trainStations.calculateRouteNumbersWithFixedDurations(null));
+        }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_size_is_exceed() {
+            // then
+            assertThrows(InvalidArgumentException.class, () -> trainStations.calculateRouteNumbersWithFixedDurations("A", "C", "3", "4"));
+        }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_type_is_wrong() {
+            // then
+            assertThrows(InvalidArgumentException.class, () -> trainStations.calculateRouteNumbersWithFixedDurations("A", "C", "B"));
+        }
     }
 }

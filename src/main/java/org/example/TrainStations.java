@@ -105,13 +105,18 @@ public class TrainStations {
     }
 
     public int calculateRouteNumbersWithFixedDurations(String... args) {
-        String start = args[0];
-        String end = args[1];
-        int durations = Integer.parseInt(args[2]);
+        ArgsValidator.validateRouteCalculationArguments(args);
+        try {
+            String start = args[0];
+            String end = args[1];
+            int durations = Integer.parseInt(args[2]);
 
-        List<Route> routes = new ArrayList<>();
-        findRouteWithMaximumDurations(start, end, routes, new ArrayList<>(), durations);
-        return (int) routes.stream().filter(it -> it.getTotalDuration() == durations).count();
+            List<Route> routes = new ArrayList<>();
+            findRouteWithMaximumDurations(start, end, routes, new ArrayList<>(), durations);
+            return (int) routes.stream().filter(it -> it.getTotalDuration() == durations).count();
+        } catch (NumberFormatException ex) {
+            throw new InvalidArgumentException();
+        }
     }
 
     private void findRouteWithMaximumDurations(String start, String end, List<Route> routes, List<Trip> tripList, int durations) {
