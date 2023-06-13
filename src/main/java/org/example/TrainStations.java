@@ -76,6 +76,20 @@ public class TrainStations {
         }
     }
 
+    public int calculateTripDuration(String...args) {
+        List<Trip> allTrips = new ArrayList<>();
+        for (int i = 0; i < args.length - 1; i++) {
+            String start = args[i];
+            String end = args[i + 1];
+            Trip target = trips.stream()
+                    .filter(trip -> trip.getStart().equals(start) && trip.getEnd().equals(end))
+                    .findFirst()
+                    .orElseThrow(NoSuchRouteException::new);
+            allTrips.add(target);
+        }
+        return new Route(allTrips).getTotalDuration();
+    }
+
     private void calculateRouteNumbersWithLimitDistance(String start, String end, List<Route> routes,
                                                         List<Trip> tripList, int maxDistance) {
         List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();

@@ -141,3 +141,19 @@ when:
 计算符合规则的route数量
 then:
 throw exception
+
+
+######
+given:
+input中输入的字母数量等于2 && 字母和字母之间存在路线
+when:
+计算trip时间
+then:
+返回正确的时间
+
+given:
+input中有多个字母 && 每一个字母和前后字母都存在路线
+when:
+计算trip时间
+then:
+返回正确的时间

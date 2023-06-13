@@ -271,4 +271,34 @@ public class TrainStationsTest {
             assertThrows(InvalidArgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumDistance("A", "C", "C"));
         }
     }
+
+    @Nested
+    class DurationCalculationTest {
+        @Test
+        void should_calculate_the_total_duration_when_there_are_two_valid_location() {
+            // given
+            String start = "A";
+            String end = "D";
+
+            // when
+            Object distance = trainStations.calculateTripDuration(start, end);
+
+            // then
+            assertEquals(5, distance);
+        }
+
+        @Test
+        void should_return_correct_DURATION_when_there_are_multiple_valid_station() {
+            // given
+            String position1 = "A";
+            String position2 = "B";
+            String position3 = "C";
+
+            // when
+            Object distance = trainStations.calculateTripDuration(position1, position2, position3);
+
+            // then
+            assertEquals(11, distance);
+        }
+    }
 }
