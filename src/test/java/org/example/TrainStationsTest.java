@@ -300,5 +300,45 @@ public class TrainStationsTest {
             // then
             assertEquals(11, distance);
         }
+
+        @Test
+        void should_return_no_such_route_exception_when_route_does_not_exist() {
+            // given
+            String start = "B";
+            String end = "A";
+
+            // when
+            Object result = trainStations.calculateTripDuration(start, end);
+
+            // then
+            assertEquals("NO SUCH ROUTE", result);
+        }
+
+        @ParameterizedTest
+        @ValueSource(strings = {"A", ""})
+        void should_throw_insufficient_arguments_exception_when_there_are_less_than_two_location(String strings) {
+            // given
+            assertThrows(InsufficientArgumentsException.class,
+                    () -> trainStations.calculateTripDuration(strings.replace(" ", ",")));
+        }
+
+        @Test
+        void should_throw_null_argument_exception_when_input_is_null() {
+            assertThrows(NullArgumentException.class, () -> trainStations.calculateTripDuration(null));
+        }
+
+        @Test
+        void should_return_no_such_route_when_many_routes_do_not_exist() {
+            // given
+            String first = "A";
+            String second = "F";
+            String third = "G";
+
+            // when
+            Object result = trainStations.calculateTripDuration(first, second, third);
+
+            // then
+            assertEquals("NO SUCH ROUTE", result);
+        }
     }
 }

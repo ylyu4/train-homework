@@ -157,3 +157,31 @@ when:
 计算trip时间
 then:
 返回正确的时间
+
+given:
+input中输入的字母数量小于2
+when:
+计算距离
+when:
+throw exception
+
+given:
+input为null
+when:
+计算距离
+when:
+throw exception
+
+given:
+input中输入的字母和字母之间不存在路线
+when:
+计算距离
+when:
+返回路线不存在
+
+given:
+input中有多个字母 && 其中有一组或者多组不存在路线
+when:
+计算距离
+then:
+返回路线不存在
