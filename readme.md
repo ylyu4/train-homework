@@ -209,3 +209,26 @@ when:
 计算路线数量
 then:
 throw exception
+
+###
+
+given:
+input中输入的字母数量等于2 && 两个字母间存在1到多条路线 && 指定duration的值
+when:
+计算路线数量
+then:
+返回正确路线数量
+
+given:
+input中输入的字母数量等于2 && 两个字母间不存在路线 && 指定duration的值
+when:
+计算路线数量
+then:
+返回0
+
+given:
+input中输入为null || 输入的数量不正确 || duration的值不为integer
+when:
+计算路线数量
+then:
+throw exception

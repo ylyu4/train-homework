@@ -363,6 +363,15 @@ public class TrainStationsTest {
         }
 
         @Test
+        void should_return_0_when_there_is_no_valid_route() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithMaximumDuration("A", "A", "15");
+
+            // then
+            assertEquals(0, result);
+        }
+
+        @Test
         void should_throw_invalid_argument_exception_when_argument_is_null() {
             // then
             assertThrows(NullArgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumDuration(null));
@@ -380,5 +389,26 @@ public class TrainStationsTest {
             assertThrows(InvalidArgumentException.class, () -> trainStations.calculateRouteNumbersWithMaximumDuration("A", "C", "B"));
         }
 
+    }
+
+    @Nested
+    class RouteCalculatorWithFixedDurationsTest{
+        @Test
+        void should_return_correct_route_numbers_when_given_fixed_durations_first_scenario() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithFixedDurations("A", "C", "30");
+
+            // then
+            assertEquals(1, result);
+        }
+
+        @Test
+        void should_return_correct_route_numbers_when_given_fixed_durations_second_scenario() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithFixedDurations("A", "C", "11");
+
+            // then
+            assertEquals(1, result);
+        }
     }
 }
