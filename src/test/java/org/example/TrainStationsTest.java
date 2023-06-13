@@ -458,5 +458,22 @@ public class TrainStationsTest {
             // then
             assertEquals(13, result);
         }
+
+        @Test
+        void should_throw_exception_when_there_is_no_route_between_stations() {
+            assertThrows(NoSuchRouteException.class, () -> trainStations.calculateTheShortestDurationRoute("A", "A"));
+        }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_is_null() {
+            // then
+            assertThrows(NullArgumentException.class, () -> trainStations.calculateTheShortestDurationRoute(null));
+        }
+
+        @Test
+        void should_throw_invalid_argument_exception_when_argument_size_is_exceed() {
+            // then
+            assertThrows(InvalidArgumentException.class, () -> trainStations.calculateTheShortestDurationRoute("A", "C", "3", "4"));
+        }
     }
 }

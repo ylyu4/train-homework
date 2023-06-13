@@ -99,6 +99,7 @@ public class TrainStations {
     }
 
     public int calculateTheShortestDurationRoute(String... args) {
+        ArgsValidator.validateShortestDistanceCalculationArguments(args);
         String start = args[0];
         String end = args[1];
 
@@ -107,7 +108,8 @@ public class TrainStations {
         calculateShortestRouteBetweenTwoStation(start, end, routes, new ArrayList<>());
         return routes.stream()
                 .map(Route::getTotalDuration)
-                .min((duration1, duration2) -> duration1 < duration2 ? 0 : 1).get();
+                .min((duration1, duration2) -> duration1 < duration2 ? 0 : 1)
+                .orElseThrow(NoSuchRouteException::new);
     }
 
     private List<Route> getRoutesByDurations(String... args) {
