@@ -98,6 +98,18 @@ public class TrainStations {
         return (int) getRoutesByDurations(args).stream().filter(it -> it.getTotalDuration() == fixedDuration).count();
     }
 
+    public int calculateTheShortestDurationRoute(String... args) {
+        String start = args[0];
+        String end = args[1];
+
+        List<Route> routes = new ArrayList<>();
+
+        calculateShortestRouteBetweenTwoStation(start, end, routes, new ArrayList<>());
+        return routes.stream()
+                .map(Route::getTotalDuration)
+                .min((duration1, duration2) -> duration1 < duration2 ? 0 : 1).get();
+    }
+
     private List<Route> getRoutesByDurations(String... args) {
         ArgsValidator.validateRouteCalculationArguments(args);
         try {

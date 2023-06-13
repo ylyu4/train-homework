@@ -438,4 +438,25 @@ public class TrainStationsTest {
             assertThrows(InvalidArgumentException.class, () -> trainStations.calculateRouteNumbersWithFixedDurations("A", "C", "B"));
         }
     }
+
+    @Nested
+    class ShortestRouteDurationCalculatorTest {
+        @Test
+        void should_return_the_shortest_route_duration_between_two_stations_scenario_1() {
+            // when
+            Integer result = trainStations.calculateTheShortestDurationRoute("A", "C");
+
+            // then
+            assertEquals(11, result);
+        }
+
+        @Test
+        void should_return_the_shortest_route_between_two_stations_scenario_2() {
+            // when
+            Integer result = trainStations.calculateTheShortestDurationRoute("B", "B");
+
+            // then
+            assertEquals(13, result);
+        }
+    }
 }
