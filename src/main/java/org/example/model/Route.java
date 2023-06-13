@@ -24,4 +24,9 @@ public class Route {
                 (trips.size() - 1) * STOP_DURATION;
     }
 
+    public static int getTotalDuration(List<Trip> tripList) {
+        return tripList.stream().mapToInt(Trip::getDurations).sum() +
+                (tripList.size() - 1) * STOP_DURATION;
+    }
+
 }

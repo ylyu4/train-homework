@@ -476,4 +476,18 @@ public class TrainStationsTest {
             assertThrows(InvalidArgumentException.class, () -> trainStations.calculateTheShortestDurationRoute("A", "C", "3", "4"));
         }
     }
+
+    @Nested
+    class RouteNumberCalculatorWithMaximumDurationTest {
+        @Test
+        void should_return_the_correct_route_numbers_with_maximum_distance() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithMaximumDurationLimit("C", "C", "35");
+
+            // then
+            assertEquals(6, result);
+        }
+
+
+    }
 }

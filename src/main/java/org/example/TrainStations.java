@@ -95,6 +95,27 @@ public class TrainStations {
                 (duration1, duration2) -> duration1 < duration2 ? 0 : 1);
     }
 
+    public int calculateRouteNumbersWithMaximumDurationLimit(String... args) {
+        String start = args[0];
+        String end = args[1];
+        int maxDuration = Integer.parseInt(args[2]);
+
+        List<Route> routes = new ArrayList<>();
+        calculateRouteNumbersWithLimitDuration(start, end, routes, new ArrayList<>(), maxDuration);
+        return routes.size();
+    }
+
+    private void calculateRouteNumbersWithLimitDuration(String start, String end, List<Route> routes, List<Trip> tripList, int maxDuration) {
+        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
+        for (Trip trip : tripsWithMatchedStart) {
+            boolean isTripDurationValidForCurrentRoute = Route.getTotalDuration(tripList) +
+                    trip.getDurations() >= maxDuration;
+            List<Trip> tempTripList = getTrips(end, routes, tripList, trip, isTripDurationValidForCurrentRoute);
+            if (tempTripList == null) break;
+            calculateRouteNumbersWithLimitDuration(trip.getEnd(), end, routes, tempTripList, maxDuration);
+        }
+    }
+
     private Integer getTheDurationForTheShortestRoute(String[] args, Function<Route, Integer> function, Comparator<Integer> comparator) {
         ArgsValidator.validateShortestDistanceCalculationArguments(args);
         String start = args[0];
