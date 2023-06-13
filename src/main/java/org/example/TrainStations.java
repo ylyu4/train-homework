@@ -80,16 +80,7 @@ public class TrainStations {
         ArgsValidator.validateDistanceCalculationArguments(args);
 
         try {
-            List<Trip> allTrips = new ArrayList<>();
-            for (int i = 0; i < args.length - 1; i++) {
-                String start = args[i];
-                String end = args[i + 1];
-                Trip target = trips.stream()
-                        .filter(trip -> trip.getStart().equals(start) && trip.getEnd().equals(end))
-                        .findFirst()
-                        .orElseThrow(NoSuchRouteException::new);
-                allTrips.add(target);
-            }
+            List<Trip> allTrips = getTrips(args);
             return new Route(allTrips).getTotalDuration();
         } catch (NoSuchRouteException ex) {
             return NO_SUCH_ROUTE;
@@ -174,6 +165,11 @@ public class TrainStations {
     }
 
     private int calculateDistanceForMultiplePoints(String[] args) {
+        List<Trip> allTrips = getTrips(args);
+        return new Route(allTrips).getTotalDistance();
+    }
+
+    private List<Trip> getTrips(String[] args) {
         List<Trip> allTrips = new ArrayList<>();
         for (int i = 0; i < args.length - 1; i++) {
             String start = args[i];
@@ -184,8 +180,7 @@ public class TrainStations {
                     .orElseThrow(NoSuchRouteException::new);
             allTrips.add(target);
         }
-
-        return new Route(allTrips).getTotalDistance();
+        return allTrips;
     }
 
     private static int getFixedStops(String... args) {
