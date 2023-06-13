@@ -341,4 +341,25 @@ public class TrainStationsTest {
             assertEquals("NO SUCH ROUTE", result);
         }
     }
+
+    @Nested
+    class RouteCalculatorWithMaximumDurationsTest {
+        @Test
+        void should_return_correct_route_numbers_when_given_maximum_duration_first_scenario() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithMaximumDuration("C", "C", "30");
+
+            // then
+            assertEquals(4, result);
+        }
+
+        @Test
+        void should_return_correct_route_numbers_when_given_maximum_stops_second_scenario() {
+            // when
+            Integer result = trainStations.calculateRouteNumbersWithMaximumDuration("A", "C", "15");
+
+            // then
+            assertEquals(2, result);
+        }
+    }
 }

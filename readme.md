@@ -185,3 +185,27 @@ when:
 计算距离
 then:
 返回路线不存在
+
+
+####
+
+given:
+input中输入的字母数量等于2 && 两个字母间存在1到多条路线 && 最大duration的值
+when:
+计算路线数量
+then:
+返回正确路线数量
+
+given:
+input中输入的字母数量等于2 && 两个字母间不存在路线 && 最大duration的值
+when:
+计算路线数量
+then:
+返回0
+
+given:
+input中输入为null || 输入的数量不正确 || 最大duration的值不为integer
+when:
+计算路线数量
+then:
+throw exception

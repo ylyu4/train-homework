@@ -11,6 +11,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static org.example.model.Route.STOP_DURATION;
+
 public class TrainStations {
 
     private final List<Trip> trips;
@@ -84,6 +86,34 @@ public class TrainStations {
             return new Route(allTrips).getTotalDuration();
         } catch (NoSuchRouteException ex) {
             return NO_SUCH_ROUTE;
+        }
+    }
+
+    public int calculateRouteNumbersWithMaximumDuration(String... args) {
+        String start = args[0];
+        String end = args[1];
+        int durations = Integer.parseInt(args[2]);
+
+        List<Route> routes = new ArrayList<>();
+        findRouteWithMaximumDurations(start, end, routes, new ArrayList<>(), durations);
+        return routes.size();
+    }
+
+    private void findRouteWithMaximumDurations(String start, String end, List<Route> routes, List<Trip> tripList, int durations) {
+        List<Trip> tripsWithMatchedStart = trips.stream().filter(it -> it.getStart().equals(start)).toList();
+        for (Trip trip : tripsWithMatchedStart) {
+            List<Trip> tempTripList = new ArrayList<>();
+            if (!tripList.isEmpty()) {
+                tempTripList.addAll(tripList);
+            }
+            if (tripList.stream().mapToInt(Trip::getDurations).sum() + trip.getDurations() + tripList.size() * STOP_DURATION > durations) {
+                break;
+            }
+            tempTripList.add(trip);
+            if (trip.getEnd().equals(end)) {
+                routes.add(new Route(tempTripList));
+            }
+            findRouteWithMaximumDurations(trip.getEnd(), end, routes, tempTripList, durations);
         }
     }
 

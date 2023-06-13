@@ -3,9 +3,7 @@ package org.example.model;
 import java.util.List;
 
 public class Route {
-    private static final int STOP_DURATION = 2;
-
-    private static final int DISTANCE_DURATION = 1;
+    public static final int STOP_DURATION = 2;
 
     private List<Trip> trips;
 
@@ -22,7 +20,7 @@ public class Route {
     }
 
     public int getTotalDuration() {
-        return trips.stream().mapToInt(it -> it.getDistance() * DISTANCE_DURATION).sum() +
+        return trips.stream().mapToInt(Trip::getDurations).sum() +
                 (trips.size() - 1) * STOP_DURATION;
     }
 

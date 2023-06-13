@@ -2,6 +2,8 @@ package org.example.model;
 
 public class Trip {
 
+    public static final int DISTANCE_DURATION = 1;
+
     private String start;
 
     private String end;
@@ -36,5 +38,9 @@ public class Trip {
 
     public void setDistance(int distance) {
         this.distance = distance;
+    }
+
+    public int getDurations() {
+        return this.distance * DISTANCE_DURATION;
     }
 }
